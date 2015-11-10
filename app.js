@@ -32,6 +32,7 @@ app.get('/', function (req, res) {
 		return { name: name }
 	});
 	res.render('index', {title: "An Example", people: people});
+
 });
 
 // app.get('/', function (req, res) {
