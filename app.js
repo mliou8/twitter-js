@@ -28,22 +28,13 @@ app.use(function(req, res, next) {
   })
 })
 
-//middleware
-// app.use(morgan('default', {}));
-app.use (function (req, res, next) {
-	res.statusCode = 418;
-	//console.log(chalk.yellow([res.statusCode, req.method, req.path].join(' ')));
-	console.log(path.join(req.path));
-	next();
-});
-
 app.use('/', routes);
 
 
 
-
+var port = 3000;
 app.listen(3000, function () {
-	console.log(chalk.red("Server listening"));
+	console.log(chalk.green("Server listening at " + port));
 });
 
 app.get('/', function (req, res) {
@@ -53,5 +44,3 @@ app.get('/', function (req, res) {
 	res.render('index', {title: "An Example", people: people});
 
 });
-
-
