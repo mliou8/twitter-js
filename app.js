@@ -4,7 +4,10 @@ var express = require('express'),
 	chalk = require('chalk'),
 	morgan = require('morgan'),
 	swig = require('swig'),
-	path = require('path');
+	path = require('path'),
+	routes = require('./routes/'),
+	mime = require('mime'),
+	fs = require('fs');
 
 
 app.engine('html', swig.renderFile);
@@ -15,6 +18,17 @@ app.set('views', __dirname + '/views');
 swig.setDefaults({cache: false});
 
 
+app.use(function(req, res, next) {
+  console.log(req.path)
+  var mimeType = mime.lookup(req.path)
+  fs.readFile('./public/' + req.path, function(err, fileBuffer) {
+    if(err) return next()
+    res.header('Content-Type', mimeType)
+    res.send(fileBuffer)
+  })
+})
+
+//middleware
 // app.use(morgan('default', {}));
 app.use (function (req, res, next) {
 	res.statusCode = 418;
@@ -22,6 +36,11 @@ app.use (function (req, res, next) {
 	console.log(path.join(req.path));
 	next();
 });
+
+app.use('/', routes);
+
+
+
 
 app.listen(3000, function () {
 	console.log(chalk.red("Server listening"));
@@ -35,6 +54,4 @@ app.get('/', function (req, res) {
 
 });
 
-// app.get('/', function (req, res) {
-// 	res.send('<h3> Hello, welcome to the world. </h3>');
-// });
+
