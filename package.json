@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mliou8/twitter-js#readme",
   "dependencies": {
+    "chalk": "^1.1.1",
     "express": "^4.13.3"
   }
 }
