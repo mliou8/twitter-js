@@ -7,12 +7,17 @@ var express = require('express'),
 	path = require('path'),
 	routes = require('./routes/'),
 	mime = require('mime'),
-	fs = require('fs');
+	fs = require('fs'),
+	bodyParser = require('body-parser');
 
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
+
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
 
 //Turned off for development purposes
 swig.setDefaults({cache: false});
