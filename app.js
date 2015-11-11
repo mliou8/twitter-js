@@ -1,15 +1,17 @@
 // MODULES
+// This is so ugly. Some way to improve it?
 var express = require('express'),
-	app = express(),
+	bodyParser = require('body-parser');
 	chalk = require('chalk'),
+	fs = require('fs'),
+	mime = require('mime'),
 	morgan = require('morgan'),
-	swig = require('swig'),
 	path = require('path'),
 	routes = require('./routes/'),
-	mime = require('mime'),
-	fs = require('fs'),
-	bodyParser = require('body-parser');
+	socketio = require('socket.io'),
+	swig = require('swig');
 
+var app = express();
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
@@ -33,14 +35,13 @@ app.use(function(req, res, next) {
   })
 })
 
-app.use('/', routes);
-
-
-
 var port = 3000;
-app.listen(3000, function () {
+var server = app.listen(3000, function () {
 	console.log(chalk.green("Server listening at " + port));
 });
+var io = socketio.listen(server);
+
+app.use('/', routes(io));
 
 app.get('/', function (req, res) {
 	var people = ['Dumbledore', 'Frodo', 'Sam'].map(function(name) {
